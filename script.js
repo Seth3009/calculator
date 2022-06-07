@@ -5,7 +5,7 @@ clearButton = document.querySelector('.clear');
 delButton = document.querySelector('.del');
 display = document.querySelector('.display');
 signButton = document.querySelector('.sign');
-allButton = document.querySelectorAll('btn');
+allButton = document.querySelectorAll('.btn');
 let prevNumber;
 let currNumber;
 let operator;
@@ -38,7 +38,10 @@ function numKey(num){
   if (num === '.' && currNumber.includes('.')) return
   if(!isResult){
     currNumber == undefined ? currNumber = num : currNumber = currNumber + num;
-  } else {currNumber = num}
+  } else { 
+    currNumber = num;
+    isResult = !isResult;
+  }
 }
 
 function optKey(opt){
@@ -47,6 +50,7 @@ function optKey(opt){
   if(prevNumber !== ''){
     operate()
   }
+  
   operator = opt;
   prevNumber = currNumber;
   currNumber = '';
@@ -103,8 +107,14 @@ function updateDisplay() {
   isNaN(currNumber) ? '' : display.value = getDisplayNumber(currNumber)
 }
 
+function playSound(){
+  const audio = document.querySelector('audio');
+  if(!audio) return;
+  audio.currentTime = 0;
+  audio.play();
+}
 
-
+allButton.forEach(button => button.addEventListener('click', playSound));
 buttons.forEach(button => button.addEventListener('click',() => {
   numKey(button.innerText);
   updateDisplay();
@@ -134,6 +144,7 @@ window.addEventListener('keydown',(e) => {
     }
   }
   updateDisplay();
+  playSound();
 });
 
 optButtons.forEach(opt => opt.addEventListener('click', () => {
