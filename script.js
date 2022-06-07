@@ -5,6 +5,7 @@ clearButton = document.querySelector('.clear');
 delButton = document.querySelector('.del');
 display = document.querySelector('.display');
 signButton = document.querySelector('.sign');
+allButton = document.querySelectorAll('btn');
 let prevNumber;
 let currNumber;
 let operator;
@@ -28,7 +29,9 @@ function clearAll(){
 }
 
 function deleteNum(){
-  currNumber = currNumber.slice(0, -1);
+  if(currNumber != ''){
+    currNumber = currNumber.slice(0, -1);
+  }
 }
 
 function numKey(num){
@@ -54,7 +57,7 @@ function operate(){
   let result;
   let numBefore = parseFloat(prevNumber);
   let numCurrent = parseFloat(currNumber);
-
+  
   if(isNaN(numBefore) || isNaN(numCurrent)) return;
   switch (operator) {
     case "+":
@@ -67,6 +70,7 @@ function operate(){
       result= numBefore * numCurrent;
       break;
     case "÷":
+    case "/":
       result= numBefore / numCurrent;
       break;
     default:
@@ -96,7 +100,7 @@ function getDisplayNumber(number) {
 }
 
 function updateDisplay() {
-  display.value = getDisplayNumber(currNumber)
+  isNaN(currNumber) ? '' : display.value = getDisplayNumber(currNumber)
 }
 
 
@@ -105,6 +109,32 @@ buttons.forEach(button => button.addEventListener('click',() => {
   numKey(button.innerText);
   updateDisplay();
 }));
+window.addEventListener('keydown',(e) => {
+  let number = /[0-9]/g;
+  let opt =/[-+.*/]/g;
+  if(number.test(e.key)){
+    numKey(e.key);
+  } else if (opt.test(e.key)){
+    optKey(e.key)
+  } else {
+    switch (e.key){
+      case '=':
+      case 'Enter':
+        operate();
+        break;
+      case 'Escape':
+        clearAll()
+        break
+      case 'Delete':
+      case 'Backspace':
+        deleteNum()
+        break;
+      default:
+        return
+    }
+  }
+  updateDisplay();
+});
 
 optButtons.forEach(opt => opt.addEventListener('click', () => {
   optKey(opt.innerText);
@@ -127,6 +157,8 @@ delButton.addEventListener('click', () => {
 });
 
 signButton.addEventListener('click', () => {
-  currNumber = (parseFloat(currNumber) * -1).toString();
-  updateDisplay();
+  if(currNumber != ''){
+    currNumber = (parseFloat(currNumber) * -1).toString();
+    updateDisplay();
+  }
 })
