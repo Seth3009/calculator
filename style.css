@@ -55,10 +55,16 @@ button {
   font-weight: bold;
 }
 
+.opt, .del, .clear, .result{
+  box-shadow: inset 6px 6px 13px #76b7c1,
+  1px 1px 1px rgba(0,0,0,16);
+}
+
 .result{
   width: 120px;
   border-radius: 30px;
-  background-color: #1ba2bb;
+  background-color: #74f0c0;
+  
 }
 
 button:active {
